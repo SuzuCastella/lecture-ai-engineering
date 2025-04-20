@@ -1,5 +1,4 @@
 # 演習で作成されるシークレットファイルとdbファイル
-**/secrets.toml
 **/secret.toml
 **/chat_feedback.db
 
