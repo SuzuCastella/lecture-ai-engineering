@@ -120,6 +120,7 @@ def test_model_accuracy(train_model):
     # Titanicデータセットでは0.75以上の精度が一般的に良いとされる
     assert accuracy >= 0.75, f"モデルの精度が低すぎます: {accuracy}"
 
+
 def test_model_overfitting_check(train_model):
     """訓練精度とテスト精度の差が大きすぎないかを検証"""
     model, X_test, y_test = train_model
@@ -136,7 +137,10 @@ def test_model_overfitting_check(train_model):
     delta = train_acc - test_acc
 
     # 訓練とテストの差が 0.1 未満であることを確認
-    assert delta < 0.1, f"過学習の可能性があります: 訓練精度={train_acc:.3f}, テスト精度={test_acc:.3f}"
+    assert (
+        delta < 0.1
+    ), f"過学習の可能性があります: 訓練精度={train_acc:.3f}, テスト精度={test_acc:.3f}"
+
 
 def test_model_inference_time(train_model):
     """モデルの推論時間を検証"""
