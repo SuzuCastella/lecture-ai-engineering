@@ -121,6 +121,27 @@ def test_model_accuracy(train_model):
     assert accuracy >= 0.75, f"モデルの精度が低すぎます: {accuracy}"
 
 
+def test_model_overfitting_check(train_model):
+    """訓練精度とテスト精度の差が大きすぎないかを検証"""
+    model, X_test, y_test = train_model
+
+    # 学習データ再取得（train_model の fixture を使うと train は失われてるため）
+    data = pd.read_csv(DATA_PATH)
+    X = data.drop("Survived", axis=1)
+    y = data["Survived"].astype(int)
+    X_train, _, y_train, _ = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # 精度計算
+    train_acc = accuracy_score(y_train, model.predict(X_train))
+    test_acc = accuracy_score(y_test, model.predict(X_test))
+    delta = train_acc - test_acc
+
+    # 訓練とテストの差が 0.1 未満であることを確認
+    assert (
+        delta < 0.1
+    ), f"過学習の可能性があります: 訓練精度={train_acc:.3f}, テスト精度={test_acc:.3f}"
+
+
 def test_model_inference_time(train_model):
     """モデルの推論時間を検証"""
     model, X_test, _ = train_model
